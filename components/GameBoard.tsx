@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import Card from "./Card";
 import { formatTime } from "./utils";
 
@@ -40,31 +46,37 @@ export default function GameBoard({
   };
 
   return (
-    <View style={styles.gameContent}>
+    <ScrollView
+      style={styles.gameContent}
+      contentContainerStyle={styles.gameContentContainer}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.gameTitle}>Level {gameLevel}</Text>
       <Text style={styles.gameScore}>Score: {gameScore}</Text>
       <Text style={styles.gameIncorrect}>Incorrect: {gameIncorrect}</Text>
       <Text style={styles.gameTime}>Time: {formatTime(gameTime)}</Text>
-      <View style={styles.gameCards}>
-        {shuffledCards.map((card) => {
-          const isFlipped = flippedCards.includes(card.id);
-          const isMatched = matchedPairs.includes(card.pairId);
+      <View style={styles.gameCardsContainer}>
+        <View style={styles.gameCards}>
+          {shuffledCards.map((card) => {
+            const isFlipped = flippedCards.includes(card.id);
+            const isMatched = matchedPairs.includes(card.pairId);
 
-          return (
-            <Card
-              key={card.id}
-              card={card}
-              isFlipped={isFlipped}
-              isMatched={isMatched}
-              onPress={() => handleCardPress(card.id)}
-            />
-          );
-        })}
+            return (
+              <Card
+                key={card.id}
+                card={card}
+                isFlipped={isFlipped}
+                isMatched={isMatched}
+                onPress={() => handleCardPress(card.id)}
+              />
+            );
+          })}
+        </View>
         <TouchableOpacity style={styles.gameStopButton} onPress={onStopGame}>
           <Text style={styles.gameStopButtonText}>Stop Game</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -72,7 +84,8 @@ const styles = StyleSheet.create({
   gameContent: {
     flex: 1,
     backgroundColor: "#ecf0f1",
-    justifyContent: "flex-start",
+  },
+  gameContentContainer: {
     alignItems: "center",
     padding: 20,
     paddingTop: 40,
@@ -102,6 +115,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 20,
   },
+  gameCardsContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
   gameCards: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -129,4 +146,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
-
